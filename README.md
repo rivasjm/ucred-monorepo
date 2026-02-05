@@ -153,6 +153,25 @@ Un workflow más avanzado que incluye:
 - ✅ Generación de reportes de pruebas
 - ✅ Creación de artefactos (ejecutables)
 
+### Workflow de Release (`release.yml`)
+
+Un workflow automatizado para crear releases multiplataforma:
+- 🚀 Se activa al crear tags con formato `v*.*.*` (ej: `v1.0.0`)
+- 🪟 Compila para Windows x64
+- 🍎 Compila para macOS (Intel y Apple Silicon)
+- 🐧 Compila para Linux x64
+- 📦 Empaqueta y publica automáticamente en GitHub Releases
+
+**Ver guía completa**: [RELEASES.md](RELEASES.md)
+
+**Ejemplo rápido:**
+```bash
+# Crear y publicar un release
+git tag -a v1.0.0 -m "Release v1.0.0: Primera versión"
+git push origin v1.0.0
+# El workflow se ejecuta automáticamente
+```
+
 ## 📚 Conceptos de GitHub Actions Este Proyecto
 
 ### 1. **Triggers (on)**
