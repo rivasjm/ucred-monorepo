@@ -1,7 +1,7 @@
 # 🧮 Calculadora Demo - GitHub Actions
 
-[![CI/CD Pipeline](https://github.com/rivasjm/ucred-gh-actions/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/rivasjm/ucred-gh-actions/actions/workflows/ci-cd.yml)
-[![Build Simple](https://github.com/rivasjm/ucred-gh-actions/actions/workflows/simple.yml/badge.svg)](https://github.com/rivasjm/ucred-gh-actions/actions/workflows/simple.yml)
+[![CI/CD Pipeline](https://github.com/rivasjm/ucred-dotnet-ui/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/rivasjm/ucred-dotnet-ui/actions/workflows/ci-cd.yml)
+[![Build Simple](https://github.com/rivasjm/ucred-dotnet-ui/actions/workflows/simple.yml/badge.svg)](https://github.com/rivasjm/ucred-dotnet-ui/actions/workflows/simple.yml)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-Educational-green.svg)](LICENSE)
 
