@@ -22,16 +22,20 @@ API REST completa desarrollada con ASP.NET Core que demuestra las mejores práct
 
 ## ☁️ Deployment en la Nube
 
-Esta API se despliega automáticamente a **Azure Container Apps** con cada push a `main`.
+Esta API se puede desplegar fácilmente a **Railway** con deployment automático.
 
-**Ver guía completa de configuración**: [AZURE_SETUP.md](AZURE_SETUP.md)
+**Ver guía de deployment**: [RAILWAY.md](RAILWAY.md)
 
 **Características del deployment:**
 - 🐳 Imagen Docker optimizada multi-stage
-- 🔄 CI/CD automático con GitHub Actions
-- 🧪 Tests automáticos antes de desplegar
-- 📊 Health checks post-deployment
-- 🆓 Tier gratuito de Azure (ideal para educación)
+- 🔄 Deployments automáticos desde GitHub
+- 🧪 Tests ejecutados durante el build
+- 🆓 Plan gratuito ($5/mes) ideal para educación
+- ⚡ Deploy en 3 minutos sin configuración compleja
+
+**Deploy Now:**
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/new?referralCode=alphasec)
 
 ## 🚀 Inicio Rápido
 
