@@ -2,6 +2,7 @@
 
 [![CI/CD Pipeline](https://github.com/rivasjm/ucred-dotnet-api/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/rivasjm/ucred-dotnet-api/actions/workflows/ci-cd.yml)
 [![Build Simple](https://github.com/rivasjm/ucred-dotnet-api/actions/workflows/simple.yml/badge.svg)](https://github.com/rivasjm/ucred-dotnet-api/actions/workflows/simple.yml)
+[![Azure Deploy](https://github.com/rivasjm/ucred-dotnet-api/actions/workflows/azure-deploy.yml/badge.svg)](https://github.com/rivasjm/ucred-dotnet-api/actions/workflows/azure-deploy.yml)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-Educational-green.svg)](LICENSE)
 
@@ -16,6 +17,21 @@ API REST completa desarrollada con ASP.NET Core que demuestra las mejores práct
 - ✅ Tests unitarios y de integración
 - ✅ Logging estructurado
 - ✅ Manejo de errores apropiado
+- ✅ Deployment automático a Azure Container Apps
+- ✅ Dockerizado para despliegue en la nube
+
+## ☁️ Deployment en la Nube
+
+Esta API se despliega automáticamente a **Azure Container Apps** con cada push a `main`.
+
+**Ver guía completa de configuración**: [AZURE_SETUP.md](AZURE_SETUP.md)
+
+**Características del deployment:**
+- 🐳 Imagen Docker optimizada multi-stage
+- 🔄 CI/CD automático con GitHub Actions
+- 🧪 Tests automáticos antes de desplegar
+- 📊 Health checks post-deployment
+- 🆓 Tier gratuito de Azure (ideal para educación)
 
 ## 🚀 Inicio Rápido
 
