@@ -1,0 +1,198 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-jar:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build JAR
+      run: mvn package -DskipTests
+
+    - name: Upload JAR
+      uses: actions/upload-artifact@v4
+      with:
+        name: jar-file
+        path: target/ucred-java-ui-movies-*.jar
+
+  build-windows:
+    needs: build-jar
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Download JAR
+      uses: actions/download-artifact@v4
+      with:
+        name: jar-file
+        path: target/
+
+    - name: Create Windows portable app with jpackage
+      run: |
+        jpackage --input target `
+          --name "UCRED-Movies" `
+          --main-jar ucred-java-ui-movies-1.0.0.jar `
+          --type app-image `
+          --app-version 1.0.0 `
+          --vendor "UCRED" `
+          --description "Movie browser using TMDb API"
+        Compress-Archive -Path "UCRED-Movies" -DestinationPath "UCRED-Movies-Windows-x64.zip"
+
+    - name: Upload Windows portable app
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-portable
+        path: "*.zip"
+
+  build-macos:
+    needs: build-jar
+    runs-on: macos-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Download JAR
+      uses: actions/download-artifact@v4
+      with:
+        name: jar-file
+        path: target/
+
+    - name: Create macOS portable app with jpackage
+      run: |
+        jpackage --input target \
+          --name "UCRED-Movies" \
+          --main-jar ucred-java-ui-movies-1.0.0.jar \
+          --type app-image \
+          --app-version 1.0.0 \
+          --vendor "UCRED" \
+          --description "Movie browser using TMDb API"
+        zip -r UCRED-Movies-macOS.zip "UCRED-Movies.app"
+
+    - name: Upload macOS portable app
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-portable
+        path: "*.zip"
+
+  build-linux:
+    needs: build-jar
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Download JAR
+      uses: actions/download-artifact@v4
+      with:
+        name: jar-file
+        path: target/
+
+    - name: Create Linux portable app with jpackage
+      run: |
+        jpackage --input target \
+          --name UCRED-Movies \
+          --main-jar ucred-java-ui-movies-1.0.0.jar \
+          --type app-image \
+          --app-version 1.0.0 \
+          --vendor "UCRED" \
+          --description "Movie browser using TMDb API"
+        zip -r UCRED-Movies-Linux-x64.zip UCRED-Movies
+
+    - name: Upload Linux portable app
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-portable
+        path: "*.zip"
+
+  create-release:
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          jar-file/*.jar
+          windows-portable/*.zip
+          macos-portable/*.zip
+          linux-portable/*.zip
+        body: |
+          # UCRED Movies Browser ${{ github.ref_name }}
+          
+          Navegador de películas usando la API de The Movie Database (TMDb).
+          
+          ## 📦 Ejecutables portables (sin instalación)
+          
+          ✨ **No requieren configuración previa** - La aplicación pedirá tu API key al iniciar
+          
+          - **Windows**: Descarga `UCRED-Movies-Windows-x64.zip`, descomprime y **doble click** en `UCRED-Movies.exe`
+          - **macOS**: Descarga `UCRED-Movies-macOS.zip`, descomprime y **doble click** en `UCRED-Movies.app`
+          - **Linux**: Descarga `UCRED-Movies-Linux-x64.zip`, descomprime y ejecuta `./UCRED-Movies/bin/UCRED-Movies`
+          
+          🔧 **JRE incluido** - No necesitas tener Java instalado
+          
+          ## 🔑 API Key de TMDb
+          
+          Al ejecutar la aplicación, se mostrará un diálogo solicitando tu API key de TMDb.
+          
+          **Obtén tu API key gratis (1 minuto):**
+          1. Crea cuenta en https://www.themoviedb.org/signup
+          2. Ve a https://www.themoviedb.org/settings/api
+          3. Solicita API key (opción "Developer")
+          4. Copia tu **API Key (v3 auth)**
+          
+          ⚠️ **Nota**: La API key NO se guarda, deberás introducirla cada vez que abras la aplicación.
+          
+          ## JAR ejecutable (requiere Java 17+)
+          
+          Si prefieres usar el JAR directamente:
+          ```bash
+          java -jar ucred-java-ui-movies-1.0.0.jar
+          ```
+          
+          La aplicación pedirá la API key al iniciar.
+        draft: false
+        prerelease: false

@@ -1,0 +1,34 @@
+{
+  "page": 1,
+  "results": [
+    {
+      "id": 550,
+      "title": "El club de la lucha",
+      "overview": "Un empleado de oficina insomne harto de su vida se encuentra con un vendedor de jabón y juntos forman un club de lucha clandestino.",
+      "poster_path": "/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+      "release_date": "1999-10-15",
+      "vote_average": 8.4,
+      "vote_count": 26280
+    },
+    {
+      "id": 278,
+      "title": "Cadena perpetua",
+      "overview": "Acusado del asesinato de su esposa, Andy Dufresne es condenado a cadena perpetua.",
+      "poster_path": "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+      "release_date": "1994-09-23",
+      "vote_average": 8.7,
+      "vote_count": 23556
+    },
+    {
+      "id": 238,
+      "title": "El Padrino",
+      "overview": "Don Vito Corleone, el patriarca de una dinastía de crimen organizado, transfiere el control a su renuente hijo Michael.",
+      "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+      "release_date": "1972-03-14",
+      "vote_average": 8.7,
+      "vote_count": 17614
+    }
+  ],
+  "total_pages": 500,
+  "total_results": 10000
+}
