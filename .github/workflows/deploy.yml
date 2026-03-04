@@ -1,0 +1,82 @@
+name: Deploy to WebDAV
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 📦 Instalar dependencias
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+
+      - name: 🧹 Validar HTML
+        run: |
+          # Simple HTML validation - check for basic structure
+          if grep -q "<!DOCTYPE html>" index.html && \
+             grep -q "<html" index.html && \
+             grep -q "</html>" index.html; then
+            echo "✅ HTML structure is valid"
+          else
+            echo "❌ HTML structure is invalid"
+            exit 1
+          fi
+
+      - name: 🎨 Validar CSS existe
+        run: |
+          if [ -f "css/styles.css" ]; then
+            echo "✅ CSS file found"
+          else
+            echo "❌ CSS file not found"
+            exit 1
+          fi
+
+      - name: 🔧 Validar JavaScript
+        run: |
+          # Check all JS files exist
+          for file in js/calculator.js js/history.js js/theme.js js/main.js; do
+            if [ -f "$file" ]; then
+              echo "✅ Found $file"
+            else
+              echo "❌ Missing $file"
+              exit 1
+            fi
+          done
+
+      - name: 🚀 Deploy a WebDAV
+        env:
+          WEBDAV_URL: ${{ secrets.WEBDAV_URL }}
+          WEBDAV_USERNAME: ${{ secrets.WEBDAV_USERNAME }}
+          WEBDAV_PASSWORD: ${{ secrets.WEBDAV_PASSWORD }}
+        run: |
+          chmod +x deploy.sh
+          ./deploy.sh
+
+      - name: 📊 Resumen de Deployment
+        env:
+          WEBDAV_USERNAME: ${{ secrets.WEBDAV_USERNAME }}
+        run: |
+          # Extract username without @unican.es
+          USERNAME=$(echo "$WEBDAV_USERNAME" | cut -d'@' -f1)
+          
+          echo "## 🎉 Deployment Exitoso" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Archivos desplegados en /calculadora:**" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ index.html" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ css/styles.css" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ js/calculator.js" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ js/history.js" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ js/theme.js" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ js/main.js" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**URL de acceso:** https://personales.unican.es/$USERNAME/calculadora/" >> $GITHUB_STEP_SUMMARY
