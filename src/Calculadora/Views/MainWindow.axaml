@@ -1,0 +1,127 @@
+<Window xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Calculadora.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="450"
+    x:Class="Calculadora.Views.MainWindow"
+    x:DataType="vm:MainWindowViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    Title="🧮 Calculadora - GitHub Actions Demo"
+    Width="350" Height="500"
+    CanResize="False">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <Style Selector="Button.numero">
+            <Setter Property="Background" Value="#E0E0E0" />
+        </Style>
+
+        <Style Selector="Button.operacion">
+            <Setter Property="Background" Value="#FFA500" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style Selector="Button.igual">
+            <Setter Property="Background" Value="#4CAF50" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style Selector="Button.limpiar">
+            <Setter Property="Background" Value="#F44336" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*" Margin="10">
+        <!-- Display -->
+        <Border Grid.Row="0"
+            Background="#333333"
+            CornerRadius="5"
+            Padding="15"
+            Margin="0,0,0,10">
+            <TextBlock x:Name="DisplayText"
+                Text="{Binding Display}"
+                FontSize="32"
+                FontWeight="Bold"
+                Foreground="White"
+                TextAlignment="Right"
+                VerticalAlignment="Center" />
+        </Border>
+
+        <!-- Botones -->
+        <Grid Grid.Row="1" RowDefinitions="*,*,*,*,*" ColumnDefinitions="*,*,*,*">
+            <Button x:Name="BotonLimpiar" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                Content="C" Classes="limpiar" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding LimpiarCommand}" />
+            <Button x:Name="BotonDividir" Grid.Row="0" Grid.Column="2"
+                Content="/" Classes="operacion" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding EjecutarOperacionCommand}" CommandParameter="/" />
+            <Button x:Name="BotonMultiplicar" Grid.Row="0" Grid.Column="3"
+                Content="×" Classes="operacion" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding EjecutarOperacionCommand}" CommandParameter="*" />
+
+            <Button x:Name="Boton7" Grid.Row="1" Grid.Column="0" Content="7" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="7" />
+            <Button x:Name="Boton8" Grid.Row="1" Grid.Column="1" Content="8" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="8" />
+            <Button x:Name="Boton9" Grid.Row="1" Grid.Column="2" Content="9" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="9" />
+            <Button x:Name="BotonRestar" Grid.Row="1" Grid.Column="3" Content="−" Classes="operacion"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding EjecutarOperacionCommand}" CommandParameter="-" />
+
+            <Button x:Name="Boton4" Grid.Row="2" Grid.Column="0" Content="4" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="4" />
+            <Button x:Name="Boton5" Grid.Row="2" Grid.Column="1" Content="5" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="5" />
+            <Button x:Name="Boton6" Grid.Row="2" Grid.Column="2" Content="6" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="6" />
+            <Button x:Name="BotonSumar" Grid.Row="2" Grid.Column="3" Content="+" Classes="operacion"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding EjecutarOperacionCommand}" CommandParameter="+" />
+
+            <Button x:Name="Boton1" Grid.Row="3" Grid.Column="0" Content="1" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="1" />
+            <Button x:Name="Boton2" Grid.Row="3" Grid.Column="1" Content="2" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="2" />
+            <Button x:Name="Boton3" Grid.Row="3" Grid.Column="2" Content="3" Classes="numero"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="3" />
+
+            <Button x:Name="BotonIgual" Grid.Row="3" Grid.Column="3" Grid.RowSpan="2"
+                Content="=" Classes="igual"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Command="{Binding CalcularResultadoCommand}" />
+
+            <Button x:Name="Boton0" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                Content="0" Classes="numero" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding AgregarNumeroCommand}" CommandParameter="0" />
+            <Button x:Name="BotonDecimal" Grid.Row="4" Grid.Column="2"
+                Content="." Classes="numero" HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding AgregarDecimalCommand}" />
+        </Grid>
+    </Grid>
+</Window>

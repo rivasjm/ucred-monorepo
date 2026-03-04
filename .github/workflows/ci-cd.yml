@@ -1,0 +1,122 @@
+# Workflow de CI/CD para Calculadora UI
+# Este workflow se ejecuta automáticamente en cada push y pull request
+
+name: CI/CD Pipeline
+
+# Configuración de cuándo se ejecuta el workflow
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Permite ejecución manual desde GitHub
+
+# Variables de entorno globales
+env:
+  DOTNET_VERSION: '10.0.x'
+
+# Permisos necesarios para crear check runs y comentarios
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  # Job 1: Compilación y pruebas
+  build-and-test:
+    name: Compilar y Probar
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Paso 1: Obtener el código del repositorio
+    - name: 📥 Checkout del código
+      uses: actions/checkout@v4
+    
+    # Paso 2: Configurar .NET SDK
+    - name: ⚙️ Configurar .NET ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    # Paso 3: Mostrar información de .NET
+    - name: 📋 Mostrar versión de .NET
+      run: dotnet --info
+    
+    # Paso 4: Restaurar dependencias
+    - name: 📦 Restaurar dependencias
+      run: dotnet restore CalculadoraDemo.sln
+    
+    # Paso 5: Compilar la solución
+    - name: 🔨 Compilar solución
+      run: dotnet build CalculadoraDemo.sln --configuration Release --no-restore
+    
+    # Paso 6: Ejecutar pruebas unitarias
+    - name: 🧪 Ejecutar pruebas
+      run: dotnet test CalculadoraDemo.sln --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+    
+    # Paso 7: Publicar resultados de las pruebas
+    - name: 📊 Publicar resultados de pruebas
+      uses: dorny/test-reporter@v1
+      if: always()  # Ejecutar incluso si las pruebas fallan
+      with:
+        name: Resultados de Pruebas - Calculadora UI
+        path: '**/test-results.trx'
+        reporter: dotnet-trx
+    
+    # Paso 8: Generar artefacto publicable
+    - name: 📤 Publicar aplicación
+      run: dotnet publish src/Calculadora/Calculadora.csproj --configuration Release --output ./publish
+    
+    # Paso 9: Subir artefactos
+    - name: ⬆️ Subir artefactos de compilación
+      uses: actions/upload-artifact@v4
+      with:
+        name: calculadora-ui-app
+        path: ./publish
+        retention-days: 7
+
+  # Job 2: Análisis de código
+  code-analysis:
+    name: Análisis de Código
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout del código
+      uses: actions/checkout@v4
+    
+    - name: ⚙️ Configurar .NET ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: 🔍 Análisis de código con dotnet format
+      run: |
+        dotnet restore CalculadoraDemo.sln
+        dotnet format CalculadoraDemo.sln --verify-no-changes --verbosity diagnostic || true
+
+  # Job 3: Matriz de pruebas en múltiples sistemas operativos
+  multi-platform-test:
+    name: Pruebas Multi-Plataforma
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        dotnet-version: ['10.0.x']
+    
+    steps:
+    - name: 📥 Checkout del código
+      uses: actions/checkout@v4
+    
+    - name: ⚙️ Configurar .NET ${{ matrix.dotnet-version }}
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+    
+    - name: 📦 Restaurar dependencias
+      run: dotnet restore CalculadoraDemo.sln
+    
+    - name: 🔨 Compilar
+      run: dotnet build CalculadoraDemo.sln --configuration Release --no-restore
+    
+    - name: 🧪 Ejecutar pruebas
+      run: dotnet test CalculadoraDemo.sln --configuration Release --no-build --verbosity normal
