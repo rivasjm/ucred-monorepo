@@ -6,8 +6,16 @@ name: Build and Test
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'ucred-dotnet-ui/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'ucred-dotnet-ui/**'
+
+defaults:
+  run:
+    working-directory: ucred-dotnet-ui
 
 # Permisos necesarios
 permissions:

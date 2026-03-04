@@ -1,9 +1,13 @@
-name: Release
+name: Release - Java UI Movies
 
 on:
   push:
     tags:
       - 'v*'
+
+defaults:
+  run:
+    working-directory: ucred-java-ui-movies
 
 jobs:
   build-jar:
@@ -26,7 +30,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: jar-file
-        path: target/ucred-java-ui-movies-*.jar
+        path: ucred-java-ui-movies/target/ucred-java-ui-movies-*.jar
 
   build-windows:
     needs: build-jar
@@ -46,7 +50,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: jar-file
-        path: target/
+        path: ucred-java-ui-movies/target/
 
     - name: Create Windows portable app with jpackage
       run: |
@@ -63,7 +67,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: windows-portable
-        path: "*.zip"
+        path: ucred-java-ui-movies/*.zip
 
   build-macos:
     needs: build-jar
@@ -83,7 +87,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: jar-file
-        path: target/
+        path: ucred-java-ui-movies/target/
 
     - name: Create macOS portable app with jpackage
       run: |
@@ -100,7 +104,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: macos-portable
-        path: "*.zip"
+        path: ucred-java-ui-movies/*.zip
 
   build-linux:
     needs: build-jar
@@ -120,7 +124,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: jar-file
-        path: target/
+        path: ucred-java-ui-movies/target/
 
     - name: Create Linux portable app with jpackage
       run: |
@@ -137,7 +141,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: linux-portable
-        path: "*.zip"
+        path: ucred-java-ui-movies/*.zip
 
   create-release:
     needs: [build-windows, build-macos, build-linux]

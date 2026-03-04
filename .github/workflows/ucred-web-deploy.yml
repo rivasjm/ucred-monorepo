@@ -3,7 +3,13 @@ name: Deploy to WebDAV
 on:
   push:
     branches: [main]
+    paths:
+      - 'ucred-web/**'
   workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ucred-web
 
 jobs:
   deploy:

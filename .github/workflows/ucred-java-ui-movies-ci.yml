@@ -1,10 +1,18 @@
-name: CI
+name: CI - Java UI Movies
 
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'ucred-java-ui-movies/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'ucred-java-ui-movies/**'
+
+defaults:
+  run:
+    working-directory: ucred-java-ui-movies
 
 jobs:
   build:
@@ -34,4 +42,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ucred-java-ui-movies-jar
-        path: target/ucred-java-ui-movies-*.jar
+        path: ucred-java-ui-movies/target/ucred-java-ui-movies-*.jar

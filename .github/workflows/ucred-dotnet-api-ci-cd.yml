@@ -7,13 +7,21 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ main, develop ]
+    paths:
+      - 'ucred-dotnet-api/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'ucred-dotnet-api/**'
   workflow_dispatch:  # Permite ejecución manual desde GitHub
 
 # Variables de entorno globales
 env:
   DOTNET_VERSION: '10.0.x'
+
+defaults:
+  run:
+    working-directory: ucred-dotnet-api
 
 # Permisos necesarios para crear check runs y comentarios
 permissions:
@@ -72,7 +80,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: todo-api-app
-        path: ./publish
+        path: ucred-dotnet-api/publish
         retention-days: 7
 
   # Job 2: Análisis de código
